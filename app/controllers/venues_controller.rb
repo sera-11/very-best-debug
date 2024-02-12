@@ -34,14 +34,17 @@ class VenuesController < ApplicationController
   
   def update
     the_id = params.fetch("the_id")
-
-    @venue = Venue.where({ :id => the_id })
-    venue.address = params.fetch("query_address")
-    venue.name = params.fetch("Query_name")
-    venue.neighborhood = params.fetch("query_neighborhood")
-    venue.save
+    @venue = Venue.find(the_id)
+    @venue.address = params.fetch("query_address")
+    @venue.name = params.fetch("query_name")
+    @venue.neighborhood = params.fetch("query_neighborhood")
     
-    redirect_to("/venues/#{venue.id}")
+    if @venue.valid?
+      @venue.save
+      redirect_to("/venues/#{@venue.id}", {:notice => "Venue created successfully"})
+    else
+      redirect_to("/venues#{@venue.id}", {:notice => "Venue failed to create"})
+    end
   end
 
   def destroy
@@ -51,6 +54,20 @@ class VenuesController < ApplicationController
     @the_venue.destroy  
 
     redirect_to("/venues", { :notice => "Venue deleted successfully" })
+  end
+
+  def add_comment
+    @the_comment = Comment.new
+    @the_comment.venue_id = params.fetch("query_venue_id")
+    @the_comment.author_id = params.fetch("query_author_id")
+    @the_comment.body = params.fetch("query_body")
+
+    if @the_comment.valid?
+      @the_comment.save
+      redirect_to("/venues/#{@the_comment.venue_id}", { :notice => "Comment created successfully," })
+    else
+      redirect_to("/venues/#{@the_comment.venue_id}", { :notice => "Comment failed to created successfully," })
+    end
   end
 
 end
