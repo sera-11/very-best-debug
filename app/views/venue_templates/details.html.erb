@@ -54,18 +54,18 @@
     <th>Posted</th>
   </tr>
 
-  <% @the_venue.comments.each do |comment| %>
+  <% @the_venue.comments.each do |a_comment| %>
   <tr>
     <td>
-      <%= comment.commenter.username %>
+      <%= a_comment.commenter.username %>
     </td>
 
     <td>
-      <%= comment.body %>
+      <%= a_comment.body %>
     </td>
 
     <td>
-      <%= comment.created_at %>
+      <%= a_comment.created_at %>
     </td>
   </tr>
   

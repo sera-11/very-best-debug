@@ -7,11 +7,14 @@ class VenuesController < ApplicationController
   end
 
   def show
-    venue_id = params.fetch("venue_id")
-    matching_venues = Venue.where({ :id => venue_id })
-    the_venue = matching_venues
+    venue_id = params.fetch("path_id")
+    @the_venue = Venue.find(venue_id)
 
-    render({ :template => "venue_templates/details" })
+    if @the_venue.id == nil
+      redirect_to("/venues")
+    else
+      render({ :template => "venue_templates/details" })
+    end
   end
 
   def create
@@ -38,12 +41,12 @@ class VenuesController < ApplicationController
   end
 
   def destroy
-    the_id = params.fetch("venue_id")
-    matching_venues = Venue.where({ :id => the_id })
-    venue = matching_venues
-    venue.destroy
+    the_id = params.fetch("path_id")
+    @the_venue = Venue.find(the_id)
 
-    redirect_to("/venues")
+    @the_venue.destroy  
+
+    redirect_to("/venues", { :notice => "Venue deleted successfully" })
   end
 
 end
