@@ -23,13 +23,17 @@ class VenuesController < ApplicationController
     @venue.name = params.fetch("query_name")
     @venue.neighborhood = params.fetch("query_neighborhood")
     
-    @venue.save
+    if @venue.valid?
+      @venue.save
+      redirect_to("/venues/#{@venue.id}", {:notice => "Venue created successfully"})
+    else
+      redirect_to("/venues", {:notice => "Venue failed to create"})
+    end
 
-    redirect_to("/venues/#{venue.name}")
   end
   
   def update
-    the_id = params.fetch("venue_id")
+    the_id = params.fetch("the_id")
 
     @venue = Venue.where({ :id => the_id })
     venue.address = params.fetch("query_address")
